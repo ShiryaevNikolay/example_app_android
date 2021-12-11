@@ -21,23 +21,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
 import ru.shiryaev.exampleapp.R
 import ru.shiryaev.exampleapp.modules.home.service.response.Employee
 import ru.shiryaev.exampleapp.modules.home.ui.viewModel.HomeScreenViewModel
 import ru.shiryaev.exampleapp.common.ui.IconButton
+import ru.shiryaev.exampleapp.modules.home.service.data.Tabs
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel,
     onClickEmployee: (Employee) -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val titles = listOf(
-        "Сотрудники",
-        "Проекты",
-        "О приложении"
+        Tabs.Employees,
+        Tabs.Projects,
+        Tabs.About
     )
-    val selectedTab = remember { mutableStateOf(0) }
     val employees by viewModel.employees.collectAsState()
+
+    val pagerState = rememberPagerState()
+    val tabIndex = pagerState.currentPage
 
     Column() {
         Row(
@@ -58,44 +67,91 @@ fun HomeScreen(
             }
         }
         ScrollableTabRow(
-            selectedTabIndex = selectedTab.value,
+            selectedTabIndex = tabIndex,
             backgroundColor = Color.Transparent,
             edgePadding = 20.dp,
-            indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    color = Color.Blue,
-                    modifier = Modifier
-                        .tabIndicatorOffset(tabPositions[selectedTab.value])
-                )
+            indicator = @Composable { tabPositions ->
+                Box(
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage])
+                ) {
+                    Box(
+                        Modifier
+                            .width(24.dp)
+                            .height(3.dp)
+                            .clip(RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp))
+                            .background(Color.Blue)
+                            .align(Alignment.Center)
+                    )
+                }
             },
             divider = {},
             modifier = Modifier.fillMaxWidth()
         ) {
             titles.forEachIndexed { index, title ->
                 Tab(
-                    selected = selectedTab.value == index,
-                    onClick = { selectedTab.value = index }
+                    selected = tabIndex == index,
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    }
                 ) {
                     Box(
                         modifier = Modifier.height(48.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = title.uppercase(),
+                            text = title.title.uppercase(),
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.W800
+                            fontWeight = FontWeight.W800,
+                            color = if (tabIndex == index) {
+                                Color.Blue
+                            } else {
+                                Color.Gray
+                            }
                         )
                     }
                 }
             }
         }
-        LazyColumn(
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(employees) { employee ->
-                EmployeeCard(employee) {
-                    onClickEmployee(employee)
+
+        HorizontalPager(
+            count = titles.size,
+            state = pagerState
+        ) { index ->
+            when {
+                titles[index] == Tabs.Employees -> {
+                    LazyColumn(
+                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 20.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(employees) { employee ->
+                            EmployeeCard(employee) {
+                                onClickEmployee(employee)
+                            }
+                        }
+                    }
+                }
+                titles[index] == Tabs.Projects -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Text(
+                            text = "Проекты",
+                            Modifier
+                                .padding(16.dp)
+                                .align(Alignment.Center)
+                        )
+                    }
+                }
+                titles[index] == Tabs.About -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Text(
+                            text = "О приложении",
+                            Modifier
+                                .padding(16.dp)
+                                .align(Alignment.Center)
+                        )
+                    }
                 }
             }
         }
@@ -172,9 +228,7 @@ fun Tag(
         modifier = Modifier
             .clip(RoundedCornerShape(12.dp))
             .background(
-                Color.Yellow.copy(
-                    alpha = 0.5F
-                )
+                Color.LightGray
             )
             .padding(horizontal = 8.dp, vertical = 2.dp)
     ) {

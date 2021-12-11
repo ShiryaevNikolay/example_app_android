@@ -54,7 +54,10 @@ fun EmployeeDetailScreen(
                 }
             }
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(horizontal = 32.dp)
+                    .padding(bottom = 40.dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_surf),
@@ -77,6 +80,13 @@ fun EmployeeDetailScreen(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.W600,
                     color = Color.Blue
+                )
+                Spacer(Modifier.height(18.dp))
+                Text(
+                    text = employee.userInfo.city,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.W400,
+                    color = Color.Gray
                 )
             }
             Surface(
