@@ -134,14 +134,7 @@ fun HomeScreen(
                     }
                 }
                 titles[index] == Tabs.Projects -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Text(
-                            text = "Проекты",
-                            Modifier
-                                .padding(16.dp)
-                                .align(Alignment.Center)
-                        )
-                    }
+                    ProjectsPage()
                 }
                 titles[index] == Tabs.About -> {
                     Box(modifier = Modifier.fillMaxSize()) {

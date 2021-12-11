@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -12,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,10 +22,12 @@ import androidx.compose.ui.unit.sp
 import ru.shiryaev.exampleapp.R
 import ru.shiryaev.exampleapp.common.ui.IconButton
 import ru.shiryaev.exampleapp.modules.employee_detail.ui.view_model.EmployeeDetailViewModel
+import ru.shiryaev.exampleapp.modules.home.service.response.Employee
 
 @Composable
 fun EmployeeDetailScreen(
-    viewModel: EmployeeDetailViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: EmployeeDetailViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    onBackPressed: () -> Unit
 ) {
     val employee = remember { viewModel.getEmployee() }
 
@@ -44,7 +48,7 @@ fun EmployeeDetailScreen(
                 IconButton(
                     icon = R.drawable.ic_arrow_right
                 ) {
-
+                    onBackPressed()
                 }
 
                 IconButton(
@@ -89,12 +93,79 @@ fun EmployeeDetailScreen(
                     color = Color.Gray
                 )
             }
-            Surface(
-                color = Color.White,
-                modifier = Modifier.fillMaxHeight()
-            ) {
-
-            }
+            InfoCard(employee)
         }
+    }
+}
+
+@Composable
+fun InfoCard(
+    employee: Employee
+) {
+    Surface(
+        color = Color.White,
+        modifier = Modifier
+            .fillMaxSize()
+            .clip(
+                RoundedCornerShape(
+                    topStart = 20.dp,
+                    topEnd = 20.dp
+                )
+            )
+            .shadow(
+                elevation = 20.dp
+            )
+            .background(Color.White)
+            .padding(horizontal = 20.dp)
+            .padding(top = 32.dp)
+    ) {
+        Column {
+            Text(
+                text = "О сотруднике",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.W700
+            )
+            Spacer(Modifier.height(20.dp))
+            InfoRow(
+                title = "Должность",
+                subtitle = employee.position
+            )
+            Spacer(Modifier.height(12.dp))
+            InfoRow(
+                title = "Опыт работы",
+                subtitle = "${employee.experience} мес."
+            )
+            Spacer(Modifier.height(12.dp))
+            InfoRow(
+                title = "Отдел",
+                subtitle = employee.department,
+                color = Color.Blue
+            )
+        }
+    }
+}
+
+@Composable
+fun InfoRow(
+    title: String,
+    subtitle: String,
+    color: Color? = null
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.W400
+        )
+        Text(
+            text = subtitle,
+            fontSize = 17.sp,
+            fontWeight = FontWeight.W700,
+            color = color ?: Color.Black
+        )
     }
 }

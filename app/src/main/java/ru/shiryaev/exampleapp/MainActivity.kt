@@ -65,7 +65,9 @@ class MainActivity : ComponentActivity() {
                         Детальный просмотр информации о сотруднике
                          */
                         composable("employee_detail") {
-                            EmployeeDetailScreen()
+                            EmployeeDetailScreen {
+                                navController.popBackStack()
+                            }
                         }
                     }
                 }

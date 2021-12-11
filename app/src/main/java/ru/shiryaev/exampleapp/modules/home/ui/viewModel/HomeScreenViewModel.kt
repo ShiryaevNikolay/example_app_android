@@ -94,6 +94,67 @@ class HomeScreenViewModel(
                 photoUrl = "https://jrnlst.ru/sites/default/files/cover/cover_6.jpg",
                 currentProject = "Burger King",
                 experience = "19",
+            ),
+            Employee(
+                id = "398793017",
+                userInfo = UserInfo(
+                    name = "Ольга Кудрявцева",
+                    age = 19,
+                    city = "Voronezh",
+                    phone = "+7 (000) 000 00 00",
+                ),
+                position = "Android developer",
+                skills = listOf(
+                    "mvvm",
+                    "compose",
+                    "coroutines",
+                    "jetpack"
+                ),
+                createdDate = 1566038241,
+                department = "android",
+                photoUrl = "https://jrnlst.ru/sites/default/files/cover/cover_6.jpg",
+                currentProject = "Zenit",
+                experience = "36",
+            ),
+            Employee(
+                id = "4234234234",
+                userInfo = UserInfo(
+                    name = "Игорь Крутой",
+                    age = 21,
+                    city = "New York",
+                    phone = "+7 (000) 000 00 00",
+                ),
+                position = "Business Analyst",
+                skills = listOf(
+                    "swagger",
+                    "api",
+                    "UI/UX",
+                ),
+                createdDate = 1566038241,
+                department = "BA",
+                photoUrl = "https://jrnlst.ru/sites/default/files/cover/cover_6.jpg",
+                currentProject = "Bethowen",
+                experience = "12",
+            ),
+            Employee(
+                id = "988909482",
+                userInfo = UserInfo(
+                    name = "Алеся Патрикеевна",
+                    age = 28,
+                    city = "Paris",
+                    phone = "+7 (000) 000 00 00",
+                ),
+                position = "iOS developer",
+                skills = listOf(
+                    "MVP",
+                    "Swift UI",
+                    "coroutines",
+                ),
+                createdDate = 1566038241,
+                department = "iOS",
+                photoUrl = "https://jrnlst.ru/sites/default/files/cover/cover_6.jpg",
+                currentProject = "Burger King",
+                experience = "19",
             )
         )
     }
