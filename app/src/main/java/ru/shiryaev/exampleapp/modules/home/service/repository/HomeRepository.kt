@@ -6,12 +6,12 @@ import ru.shiryaev.exampleapp.modules.home.service.api.HomeApi
 import ru.shiryaev.exampleapp.modules.home.service.response.Project
 
 class HomeRepository(
-    val homeApi: HomeApi
+    private val homeApi: HomeApi
 ) {
 
-//    suspend fun getProjects(): List<Project> {
-//        return withContext(Dispatchers.IO) {
-//            homeApi.getProjects()
-//        }
-//    }
+    suspend fun getProjects(): List<Project> {
+        return withContext(Dispatchers.IO) {
+            homeApi.getProjects()
+        }
+    }
 }

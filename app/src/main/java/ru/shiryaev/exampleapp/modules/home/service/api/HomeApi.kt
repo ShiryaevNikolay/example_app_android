@@ -1,9 +1,10 @@
 package ru.shiryaev.exampleapp.modules.home.service.api
 
 import retrofit2.http.GET
+import ru.shiryaev.exampleapp.modules.home.service.response.Project
 
 interface HomeApi {
 
-    @GET("http://demo4547913.mockable.io/projects-with-employees")
-    suspend fun getProjects()
+    @GET("projects-with-employees")
+    suspend fun getProjects(): List<Project>
 }
